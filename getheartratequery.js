@@ -29,7 +29,6 @@ module.exports = new Tp.ChannelClass({
         console.log(' formate event ...');
         console.log('format event ' + event.toString());
         return 'heart rate is %s'.format(event);
-        // return '%s for %s costs $%f, contact %s '.format(event[0], event[1], event[2], event[3]);
     },
     
     invokeQuery: function invokeQuery(filters) {

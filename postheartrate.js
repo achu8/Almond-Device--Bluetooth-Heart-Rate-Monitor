@@ -1,6 +1,4 @@
 var Tp = require('thingpedia');
-var URL = 'https://colby.stanford.edu/~liujas00/almondasthma/almondasthma/wsgi.py/vital';
- 
 
 module.exports = new Tp.ChannelClass({
     Name: "PostHeartRate",
@@ -12,9 +10,7 @@ module.exports = new Tp.ChannelClass({
         this.device = device;
         this._btApi = engine.platform.getCapability('bluetooth-le');
         this.auth = "Basic " + (new Buffer(device.username + ':' + device.password)).toString('base64');
-        console.log("username=" + device.username.toString());
-        console.log("password=" + device.password.toString());
-
+       
     },
     
     _doOpen: function _doOpen() {
@@ -26,11 +22,7 @@ module.exports = new Tp.ChannelClass({
     },
     
     formatEvent: function formatEvent(event, filters) {
-        console.log(' formate event ...');
-        console.log('format event ' + event.toString());
-        console.log('post heart rate format event %s'.format(event) );
         return '%s'.format(event);
-        // return '%s for %s costs $%f, contact %s '.format(event[0], event[1], event[2], event[3]);
     },
     
     sendEvent: function sendEvent(event) {
@@ -38,7 +30,7 @@ module.exports = new Tp.ChannelClass({
         console.log('post heart rate format event %s'.format(event) );
         
         var number = -1; // invalid value
-        this._btApi.startDiscovery(20000);
+        this._btApi.startDiscovery(10000);
 
         return this._btApi.getHeartRate().then(function(result) {
             console.log('heartrate returned:' + result.toString());
@@ -52,7 +44,6 @@ module.exports = new Tp.ChannelClass({
             
             var data = JSON.stringify({amount: number , type:"hr"});
             console.log('heart rate data to be post is ' + data);
-            // [{"timestamp": "2017-05-26T21:39:03.985164+00:00", "amount": 80.0, "type": "hr"}]}
             return Tp.Helpers.Http.post(
                 'https://colby.stanford.edu/~liujas00/almondasthma/almondasthma/wsgi.py/vital/?auth=', 
                 data, {
